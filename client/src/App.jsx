@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import useStore from './store'
 import Card from './components/Card'
+import bgImage from './assets/pic.jpg'
 
 const columns = [
   { id: 'todo', title: 'To Do' },
@@ -12,6 +13,13 @@ function App() {
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const tasks = useStore((state) => state.tasks)
   const addTask = useStore((state) => state.addTask)
+
+  useEffect(() => {
+    document.body.style.backgroundImage = `url(${bgImage})`
+    document.body.style.backgroundSize = 'cover'
+    document.body.style.backgroundPosition = 'center'
+    document.body.style.backgroundRepeat = 'no-repeat'
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault()
