@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import useStore from './store'
 import Card from './components/Card'
 import bgImage from './assets/pic.jpg'
+import { DndContext } from "@dnd-kit/core"
 
 const columns = [
   { id: 'todo', title: 'To Do' },
@@ -13,6 +14,13 @@ function App() {
   const [newTaskTitle, setNewTaskTitle] = useState('')
   const tasks = useStore((state) => state.tasks)
   const addTask = useStore((state) => state.addTask)
+  const moveTask = useStore((state) => state.moveTask)
+
+const handleDragEnd = (event) => {
+  const { active, over } = event
+  if (!over) return
+  moveTask(active.id, over.id)
+}
 
   useEffect(() => {
     document.body.style.backgroundImage = `url(${bgImage})`
@@ -45,20 +53,22 @@ function App() {
         <button type="submit">Add</button>
       </form>
 
-      <main className="board">
-        {columns.map((column) => (
-          <section key={column.id} className="column">
-            <h2>{column.title}</h2>
-            <div className="column-cards">
-              {tasks
-                .filter((task) => task.column === column.id)
-                .map((task) => (
-                  <Card key={task.id} task={task} />
-                ))}
-            </div>
-          </section>
-        ))}
-      </main>
+      <DndContext onDragEnd={handleDragEnd}>
+  <main className="board">
+    {columns.map((column) => (
+      <section key={column.id} className="column">
+        <h2>{column.title}</h2>
+        <div className="column-cards">
+          {tasks
+            .filter((task) => task.column === column.id)
+            .map((task) => (
+              <Card key={task.id} task={task} />
+            ))}
+        </div>
+      </section>
+    ))}
+  </main>
+</DndContext>
     </div>
   )
 }

@@ -1,10 +1,26 @@
 import useStore from '../store'
+import { useDraggable } from "@dnd-kit/core"
 
 function Card({ task }) {
   const moveTask = useStore((state) => state.moveTask)
+  const { attributes, listeners, setNodeRef, transform } =
+  useDraggable({
+    id: task.id,
+  })
+
+  const style = {
+    transform: transform
+    ? 'translate(${tranform.x}px, ${transform.y}px)'
+    : undefined,
+    cursor: "grab",
+  }
 
   return (
-    <div className="card">
+    <div ref={setNodeRef} style={style} className="card">
+    <p {...listeners} {...attributes} style={{ cursor: "grab" }}>
+        {task.title}
+      </p>
+
       <p>{task.title}</p>
       <div className="card-buttons">
         {task.column !== "todo" && (
