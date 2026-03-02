@@ -6,11 +6,9 @@ function Column({ title, columnId }) {
   const tasks = useStore((state) =>
     state.tasks.filter(t => t.column === columnId)
   )
-
   const { setNodeRef } = useDroppable({
     id: columnId,
   })
-
   return (
     <div ref={setNodeRef} className="column">
       <h2>{title}</h2>
